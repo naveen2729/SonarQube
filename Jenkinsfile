@@ -18,14 +18,14 @@ pipeline {
 
         stage('Install') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE}") {
-                    sh 'sonar-scanner'
+                    bat 'sonar-scanner'
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 3000:3000 jenkins-docker-demo'
+                bat 'docker run -d -p 3000:3000 jenkins-docker-demo'
             }
         }
     }
