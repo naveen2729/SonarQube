@@ -2,12 +2,11 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'LocalSonar' // Must match name in Jenkins -> Manage Jenkins -> SonarQube servers
+        SONARQUBE = 'LocalSonar'
     }
 
     tools {
-        nodejs 'NodeJS' // Must match your NodeJS tool name
-        sonarScanner 'SonarScanner' // Optional if you configured SonarScanner in Jenkins
+        nodejs 'NodeJS'
     }
 
     stages {
@@ -23,16 +22,10 @@ pipeline {
             }
         }
 
-        stage('Check Sonar Scanner') {
-            steps {
-                bat 'where sonar-scanner'
-            }
-        }
-
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE}") {
-                    bat 'sonar-scanner.bat'
+                    bat 'sonar-scanner.bat' // Use .bat on Windows
                 }
             }
         }
