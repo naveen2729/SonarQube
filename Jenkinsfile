@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/naveen2729/SonarQube.git'
+                git branch: 'main', url: 'https://github.com/naveen2729/SonarQube.git'
             }
         }
 
