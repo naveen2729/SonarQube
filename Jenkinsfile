@@ -2,17 +2,18 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'LocalSonar'
+        SONARQUBE = 'LocalSonar' // Must match name in Jenkins -> Manage Jenkins -> SonarQube servers
     }
 
     tools {
-        nodejs 'NodeJS'
+        nodejs 'NodeJS' // Must match your NodeJS tool name
+        sonarScanner 'SonarScanner' // Optional if you configured SonarScanner in Jenkins
     }
 
     stages {
         stage('Clone') {
             steps {
-                git branch: 'main', url: 'https://github.com/naveen2729/SonarQube.git'
+                git 'https://github.com/naveen2729/SonarQube.git'
             }
         }
 
@@ -22,10 +23,16 @@ pipeline {
             }
         }
 
+        stage('Check Sonar Scanner') {
+            steps {
+                bat 'where sonar-scanner'
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE}") {
-                    bat 'sonar-scanner'
+                    bat 'sonar-scanner.bat'
                 }
             }
         }
