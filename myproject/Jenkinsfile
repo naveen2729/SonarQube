@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        SONARQUBE = 'LocalSonar'
+    }
+
+    tools {
+        nodejs 'NodeJS'
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/YOUR_USERNAME/YOUR_REPO.git'
+            }
+        }
+
+        stage('Install') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE}") {
+                    sh 'sonar-scanner'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build('jenkins-docker-demo')
+                }
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker run -d -p 3000:3000 jenkins-docker-demo'
+            }
+        }
+    }
+}
