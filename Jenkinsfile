@@ -18,14 +18,18 @@ pipeline {
 
         stage('Install') {
             steps {
-                bat 'npm install'
+                dir('myproject') {
+                    bat 'npm install'
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONARQUBE}") {
-                    bat 'sonar-scanner.bat' // Use .bat on Windows
+                dir('myproject') {
+                    withSonarQubeEnv("${SONARQUBE}") {
+                        bat 'sonar-scanner.bat'
+                    }
                 }
             }
         }
